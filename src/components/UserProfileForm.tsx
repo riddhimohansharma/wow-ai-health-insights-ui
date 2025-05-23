@@ -1,13 +1,13 @@
-
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader2, User } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, User } from 'lucide-react';
 import { UserProfile } from '@/pages/Index';
+import { useState } from 'react';
 
 interface UserProfileFormProps {
   onSubmit: (profile: UserProfile) => void;
@@ -40,8 +40,9 @@ export const UserProfileForm = ({ onSubmit, loading }: UserProfileFormProps) => 
         <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full mx-auto mb-4">
           <User className="w-8 h-8 text-white" />
         </div>
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Choose a User Profile</h2>
-        <p className="text-gray-600">Tell us about your health needs to get personalized recommendations.</p>
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome to Wow! Insights for Health.</h2>
+
+        <p className="text-gray-600"> Tell us a bit about your health needs, goals, or any conditions  — so we can tailor the recommendations just for you.</p>
       </div>
 
       <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
@@ -139,8 +140,8 @@ export const UserProfileForm = ({ onSubmit, loading }: UserProfileFormProps) => 
               />
             </div>
 
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white font-medium py-3 rounded-lg transition-all duration-200 hover:scale-[1.02]"
               disabled={loading || !formData.condition || !formData.summary}
             >
