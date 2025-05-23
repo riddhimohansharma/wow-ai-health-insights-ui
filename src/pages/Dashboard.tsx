@@ -146,6 +146,13 @@ const Dashboard = () => {
     setSearchQuery(event.target.value);
   };
 
+  // Utility function to calculate the average match score
+  const calculateAverageScore = () => {
+    if (userArticles.length === 0) return 0;
+    const totalScore = userArticles.reduce((sum, article) => sum + article.score, 0);
+    return Math.round((totalScore / userArticles.length) * 100); // Convert to percentage
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50">
       <div className="container mx-auto px-4 py-8">
@@ -189,7 +196,7 @@ const Dashboard = () => {
                 <TrendingUp className="w-8 h-8 text-green-600" />
                 <div>
                   <p className="text-2xl font-bold text-gray-900">
-                    {userArticles.length > 0 ? Math.round(userArticles[0]?.score * 100) : 0}%
+                    {userArticles.length > 0 ? Math.round(calculateAverageScore()) : 0}%
                   </p>
                   <p className="text-sm text-gray-600">Avg Match Score</p>
                 </div>
