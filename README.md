@@ -1,4 +1,4 @@
-# Welcome to your Wow-compass-connectrticle project
+# Welcome to your Wow-compass-connect project
 
 ## Project info
 
