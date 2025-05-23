@@ -51,7 +51,7 @@ export const Header = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-teal-700 leading-none">
-                  for Health
+                  Insights for Health
                 </h1>
               </div>
             </div>
