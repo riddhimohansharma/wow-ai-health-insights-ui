@@ -17,6 +17,8 @@ const Dashboard = () => {
   const [selectedUser, setSelectedUser] = useState<PreloadedUser | null>(null);
   const [userArticles, setUserArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   // Mock pre-loaded users
   const preloadedUsers: PreloadedUser[] = [
@@ -66,71 +68,56 @@ const Dashboard = () => {
     }
   ];
 
-  const fetchUserRecommendations = async (user: PreloadedUser) => {
+  const fetchUserRecommendations = async (user: PreloadedUser, retry: boolean = false) => {
     setLoading(true);
+    setError(null);
+    
     try {
-      // Mock API response based on user profile
-      const mockArticles: Article[] = [
-        {
-          id: "1",
-          score: 0.95,
-          payload: {
-            id: "6921",
-            title: `Managing ${user.condition}`,
-            summary: `Personalized strategies for managing ${user.condition} effectively.`,
-            tags: [user.condition.split(' ')[0], "management", "lifestyle"],
-            conditions: [user.condition],
-            age_group: user.age_group,
-            language: user.language,
-            literacy_level: user.literacy_level,
-            source: "Health Authority"
-          }
-        },
-        {
-          id: "2",
-          score: 0.88,
-          payload: {
-            id: "5234",
-            title: "Lifestyle Changes for Better Health",
-            summary: "Evidence-based lifestyle modifications for chronic conditions.",
-            tags: ["lifestyle", "nutrition", "exercise"],
-            conditions: [user.condition],
-            age_group: user.age_group,
-            language: user.language,
-            literacy_level: user.literacy_level,
-            source: "Medical Institute"
-          }
-        },
-        {
-          id: "3",
-          score: 0.82,
-          payload: {
-            id: "7891",
-            title: "Understanding Your Treatment Options",
-            summary: "Comprehensive guide to available treatments and therapies.",
-            tags: ["treatment", "therapy", "options"],
-            conditions: [user.condition],
-            age_group: user.age_group,
-            language: user.language,
-            literacy_level: user.literacy_level,
-            source: "Treatment Center"
-          }
-        }
-      ];
+      const params = new URLSearchParams({
+        condition: user.condition,
+        language: user.language,
+        literacy_level: user.literacy_level,
+        age_group: user.age_group,
+        use_filters: 'true'
+      });
 
-      setTimeout(() => {
-        setUserArticles(mockArticles);
-        setLoading(false);
-      }, 1000);
+      const response = await fetch(`http://localhost:8000/recommend?${params}`);
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch recommendations: ${response.statusText}`);
+      }
+      
+      const articles: Article[] = await response.json();
+      setUserArticles(articles);
+      setLoading(false);
+      setRetryCount(0); // Reset retry count on success
     } catch (error) {
       console.error('Error fetching recommendations:', error);
       setLoading(false);
+      setError('Failed to fetch recommendations. Please try again.');
+      
+      // Implement exponential backoff for retries
+      if (retry && retryCount < 3) {
+        const backoffDelay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+        setTimeout(() => {
+          setRetryCount(prev => prev + 1);
+          fetchUserRecommendations(user, true);
+        }, backoffDelay);
+      }
+    }
+  };
+
+  const handleRetry = () => {
+    if (selectedUser) {
+      setRetryCount(0);
+      fetchUserRecommendations(selectedUser, true);
     }
   };
 
   const handleUserSelect = (user: PreloadedUser) => {
     setSelectedUser(user);
-    fetchUserRecommendations(user);
+    setError(null);
+    fetchUserRecommendations(user, true);
   };
 
   const getScoreColor = (score: number) => {
@@ -259,6 +246,24 @@ const Dashboard = () => {
                   <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">Select a User</h3>
                   <p className="text-gray-500">Choose a user from the list to view their personalized health recommendations</p>
+                </CardContent>
+              </Card>
+            ) : error ? (
+              <Card className="h-96 flex items-center justify-center">
+                <CardContent className="text-center">
+                  <div className="text-red-600 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <p className="text-lg text-gray-900 mb-4">{error}</p>
+                  <Button 
+                    onClick={handleRetry}
+                    disabled={loading}
+                    className="bg-teal-600 hover:bg-teal-700 text-white"
+                  >
+                    {loading ? 'Retrying...' : 'Retry'}
+                  </Button>
                 </CardContent>
               </Card>
             ) : loading ? (
