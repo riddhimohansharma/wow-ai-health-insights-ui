@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [searchQuery, setSearchQuery] = useState<string>(''); // New state for search query
 
   // Mock pre-loaded users
   const preloadedUsers: PreloadedUser[] = [
@@ -67,6 +68,12 @@ const Dashboard = () => {
       lastAccess: "2024-01-12"
     }
   ];
+
+  // Filter users based on the search query
+  const filteredUsers = preloadedUsers.filter((user) =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.condition.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const fetchUserRecommendations = async (user: PreloadedUser, retry: boolean = false) => {
     setLoading(true);
@@ -133,6 +140,10 @@ const Dashboard = () => {
 
   const formatScore = (score: number) => {
     return `${Math.round(score * 100)}% match`;
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
   };
 
   return (
@@ -210,15 +221,23 @@ const Dashboard = () => {
                 </CardTitle>
                 <CardDescription>Select a user to view their recommendations</CardDescription>
               </CardHeader>
-              <CardContent className="p-0">
+              <CardContent className="p-4">
+                {/* Search Input */}
+                <input
+                  type="text"
+                  placeholder="Search users by name or condition..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4"
+                />
                 <div className="space-y-0">
-                  {preloadedUsers.map((user) => (
+                  {filteredUsers.map((user) => (
                     <div
                       key={user.id}
                       className={`p-4 border-b border-gray-100 cursor-pointer transition-colors hover:bg-teal-50 ${
                         selectedUser?.id === user.id ? 'bg-teal-50 border-l-4 border-l-teal-500' : ''
                       }`}
-                      onClick={() => handleUserSelect(user)}
+                      onClick={() => setSelectedUser(user)}
                     >
                       <div className="flex items-start space-x-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center">
@@ -237,6 +256,9 @@ const Dashboard = () => {
                       </div>
                     </div>
                   ))}
+                  {filteredUsers.length === 0 && (
+                    <p className="text-gray-500 text-sm text-center">No users found.</p>
+                  )}
                 </div>
               </CardContent>
             </Card>
