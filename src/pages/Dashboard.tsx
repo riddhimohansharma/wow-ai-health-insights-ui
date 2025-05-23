@@ -888,50 +888,6 @@ const Dashboard = () => {
       "city": "Louisville",
       "state": "Kentucky",
       "country": "US"
-    },
-    {
-      id: "4",
-      name: "Maria Garcia",
-      email: "maria.garcia@email.com",
-      condition: "type 2 diabetes",
-      language: "en",
-      literacy_level: "medium",
-      age_group: "adult",
-      summary: "Looking for diabetes management resources",
-      lastAccess: "2024-01-15"
-    },
-    {
-      id: "5",
-      name: "John Smith",
-      email: "john.smith@email.com",
-      condition: "hypertension",
-      language: "en",
-      literacy_level: "high",
-      age_group: "middle-aged",
-      summary: "Seeking heart health information",
-      lastAccess: "2024-01-14"
-    },
-    {
-      id: "6",
-      name: "Sarah Johnson",
-      email: "sarah.j@email.com",
-      condition: "chronic fatigue",
-      language: "en",
-      literacy_level: "low",
-      age_group: "older adult",
-      summary: "Need energy management strategies",
-      lastAccess: "2024-01-13"
-    },
-    {
-      id: "7",
-      name: "Ahmed Hassan",
-      email: "ahmed.hassan@email.com",
-      condition: "multiple sclerosis",
-      language: "en",
-      literacy_level: "medium",
-      age_group: "adult",
-      summary: "Looking for MS symptom management",
-      lastAccess: "2024-01-12"
     }
   ];
 
