@@ -221,23 +221,15 @@ const Dashboard = () => {
                 </CardTitle>
                 <CardDescription>Select a user to view their recommendations</CardDescription>
               </CardHeader>
-              <CardContent className="p-4">
-                {/* Search Input */}
-                <input
-                  type="text"
-                  placeholder="Search users by name or condition..."
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  className="w-full p-2 border border-gray-300 rounded-md mb-4"
-                />
+              <CardContent className="p-0">
                 <div className="space-y-0">
-                  {filteredUsers.map((user) => (
+                  {preloadedUsers.map((user) => (
                     <div
                       key={user.id}
                       className={`p-4 border-b border-gray-100 cursor-pointer transition-colors hover:bg-teal-50 ${
                         selectedUser?.id === user.id ? 'bg-teal-50 border-l-4 border-l-teal-500' : ''
                       }`}
-                      onClick={() => setSelectedUser(user)}
+                      onClick={() => handleUserSelect(user)}
                     >
                       <div className="flex items-start space-x-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center">
