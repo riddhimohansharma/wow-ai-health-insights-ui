@@ -99,3 +99,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.userListScroll {
+  overflow-y: scroll; height: 400px;
+}

@@ -1442,7 +1442,7 @@ const Dashboard = () => {
                 </CardTitle>
                 <CardDescription>Select a user to view their recommendations</CardDescription>
               </CardHeader>
-              <CardContent className="p-0">
+              <CardContent className="p-0 userListScroll">
                 <div className="space-y-0">
                   {preloadedUsers.map((user) => (
                     <div
