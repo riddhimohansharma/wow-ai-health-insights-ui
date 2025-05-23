@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 interface PreloadedUser extends UserProfile {
   id: string;
@@ -14,6 +15,7 @@ interface PreloadedUser extends UserProfile {
 }
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [selectedUser, setSelectedUser] = useState<PreloadedUser | null>(null);
   const [userArticles, setUserArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(false);
@@ -157,11 +159,19 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50">
       <div className="container mx-auto px-4 py-8">
         {/* Dashboard Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent mb-2">
-            Health Insights Dashboard
-          </h1>
-          <p className="text-gray-600">Manage user profiles and view personalized health recommendations</p>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent mb-2">
+              Health Insights Dashboard
+            </h1>
+            <p className="text-gray-600">Manage user profiles and view personalized health recommendations</p>
+          </div>
+          <button
+            onClick={() => navigate('/')}
+            className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
+          >
+            Home
+          </button>
         </div>
 
         {/* Dashboard Stats */}
