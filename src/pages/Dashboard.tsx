@@ -1,10 +1,10 @@
-
-import { useState, useEffect } from 'react';
+import { Article, UserProfile } from './Index';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { FileText, Search, TrendingUp, User, Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
 import { Badge } from '@/components/ui/badge';
-import { User, Search, FileText, TrendingUp, Users } from 'lucide-react';
-import { UserProfile, Article } from './Index';
+import { Button } from '@/components/ui/button';
 
 interface PreloadedUser extends UserProfile {
   id: string;
@@ -34,7 +34,7 @@ const Dashboard = () => {
       lastAccess: "2024-01-15"
     },
     {
-      id: "2", 
+      id: "2",
       name: "John Smith",
       email: "john.smith@email.com",
       condition: "hypertension",
@@ -71,22 +71,26 @@ const Dashboard = () => {
   const fetchUserRecommendations = async (user: PreloadedUser, retry: boolean = false) => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      const params = new URLSearchParams({
-        condition: user.condition,
-        language: user.language,
-        literacy_level: user.literacy_level,
-        age_group: user.age_group,
-        use_filters: 'true'
+      const response = await fetch(`http://localhost:8000/recommend?use_filters=true`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          condition: user.condition,
+          language: user.language,
+          literacy_level: user.literacy_level,
+          age_group: user.age_group,
+          summary: user.summary,
+        }),
       });
 
-      const response = await fetch(`http://localhost:8000/recommend?${params}`);
-      
       if (!response.ok) {
         throw new Error(`Failed to fetch recommendations: ${response.statusText}`);
       }
-      
+
       const articles: Article[] = await response.json();
       setUserArticles(articles);
       setLoading(false);
@@ -95,12 +99,12 @@ const Dashboard = () => {
       console.error('Error fetching recommendations:', error);
       setLoading(false);
       setError('Failed to fetch recommendations. Please try again.');
-      
+
       // Implement exponential backoff for retries
       if (retry && retryCount < 3) {
         const backoffDelay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
         setTimeout(() => {
-          setRetryCount(prev => prev + 1);
+          setRetryCount((prev) => prev + 1);
           fetchUserRecommendations(user, true);
         }, backoffDelay);
       }
@@ -155,7 +159,7 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center space-x-2">
@@ -167,7 +171,7 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center space-x-2">
@@ -181,7 +185,7 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center space-x-2">
@@ -257,7 +261,7 @@ const Dashboard = () => {
                     </svg>
                   </div>
                   <p className="text-lg text-gray-900 mb-4">{error}</p>
-                  <Button 
+                  <Button
                     onClick={handleRetry}
                     disabled={loading}
                     className="bg-teal-600 hover:bg-teal-700 text-white"
@@ -312,14 +316,14 @@ const Dashboard = () => {
                   </h3>
                   <div className="grid grid-cols-1 gap-4">
                     {userArticles.map((article, index) => (
-                      <Card 
-                        key={article.id} 
+                      <Card
+                        key={article.id}
                         className="hover:shadow-lg transition-all duration-200 bg-white border-gray-200 hover:border-teal-300"
                       >
                         <CardHeader className="pb-4">
                           <div className="flex items-start justify-between mb-3">
-                            <Badge 
-                              variant="outline" 
+                            <Badge
+                              variant="outline"
                               className={`${getScoreColor(article.score)} font-medium`}
                             >
                               {formatScore(article.score)}
@@ -336,9 +340,9 @@ const Dashboard = () => {
                           <div className="space-y-3">
                             <div className="flex flex-wrap gap-1">
                               {article.payload.tags.slice(0, 3).map((tag, tagIndex) => (
-                                <Badge 
-                                  key={tagIndex} 
-                                  variant="secondary" 
+                                <Badge
+                                  key={tagIndex}
+                                  variant="secondary"
                                   className="text-xs bg-teal-100 text-teal-700"
                                 >
                                   {tag}
