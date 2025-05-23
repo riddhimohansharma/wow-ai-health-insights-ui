@@ -10,15 +10,58 @@ export const Header = () => {
     <header className="bg-white shadow-sm border-b border-teal-100">
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-teal-400 to-teal-600 rounded-xl">
-              <Heart className="w-7 h-7 text-white" />
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
+              {/* WOW Logo */}
+              <div className="relative">
+                <div className="flex items-center text-4xl font-bold">
+                  <span className="text-teal-600">W</span>
+                  <div className="relative mx-1">
+                    <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center relative">
+                      <Heart className="w-6 h-6 text-white fill-white" />
+                      {/* Radiating lines */}
+                      <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                        <div className="w-0.5 h-3 bg-teal-400"></div>
+                      </div>
+                      <div className="absolute -top-1 -right-1 transform rotate-45">
+                        <div className="w-0.5 h-2 bg-teal-400"></div>
+                      </div>
+                      <div className="absolute top-1/2 -right-2 transform -translate-y-1/2">
+                        <div className="w-3 h-0.5 bg-teal-400"></div>
+                      </div>
+                      <div className="absolute -bottom-1 -right-1 transform -rotate-45">
+                        <div className="w-0.5 h-2 bg-teal-400"></div>
+                      </div>
+                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+                        <div className="w-0.5 h-3 bg-teal-400"></div>
+                      </div>
+                      <div className="absolute -bottom-1 -left-1 transform rotate-45">
+                        <div className="w-0.5 h-2 bg-teal-400"></div>
+                      </div>
+                      <div className="absolute top-1/2 -left-2 transform -translate-y-1/2">
+                        <div className="w-3 h-0.5 bg-teal-400"></div>
+                      </div>
+                      <div className="absolute -top-1 -left-1 transform -rotate-45">
+                        <div className="w-0.5 h-2 bg-teal-400"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-teal-600">W</span>
+                </div>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-teal-700 leading-none">
+                  for Health
+                </h1>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
-                WOW for Health
-              </h1>
-              <p className="text-sm text-gray-600 italic">Your Health, Your Way, Every Day. Personalized for You.</p>
+            <div className="border-l border-gray-300 pl-4 ml-2">
+              <p className="text-sm text-orange-600 italic font-medium">
+                Your Health, Your Way, Every Day.
+              </p>
+              <p className="text-sm text-orange-500 italic">
+                — Personalized for You.
+              </p>
             </div>
           </div>
           
